@@ -1,0 +1,21 @@
+version: '3.4'
+
+services:
+  orchestrator:
+    image: ${DOCKER_REGISTRY-}orchestrator
+    build:
+      context: .
+      dockerfile: Orchestrator/Dockerfile
+
+  aservice:
+    image: ${DOCKER_REGISTRY-}aservice
+    build:
+      context: .
+      dockerfile: AService/Dockerfile
+
+  bservice:
+    image: ${DOCKER_REGISTRY-}bservice
+    build:
+      context: .
+      dockerfile: BService/Dockerfile
+
