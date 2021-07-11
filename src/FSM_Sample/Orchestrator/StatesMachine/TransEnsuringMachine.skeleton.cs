@@ -6,7 +6,10 @@ namespace Orchestrator
 {
     public partial class TransEnsuringMachine
     {
-        private States _isOn = States.Healthy;
+        //flag, = States.Error while Rolling Back from step to step (backward direction)
+        //After rolling back done, this will = States.Healthy (forward direction)
+        private States _direction = States.Healthy;
+
         private void DefineStatesAndTransitions(StateMachineDefinitionBuilder<States, Events> builder)
         {
             DefineHealthyStates(builder);
@@ -24,7 +27,7 @@ namespace Orchestrator
                 .Goto(States.Step1)
                 .Execute(() =>
                 {
-                    _isOn = States.Healthy;
+                    _direction = States.Healthy;
                 });
 
             builder.In(States.Complete)
@@ -37,7 +40,7 @@ namespace Orchestrator
                 .Goto(States.Off)
                 .Execute(() =>
                 {
-                    _isOn = States.Healthy;
+                    _direction = States.Healthy;
                 });
 
             builder.WithInitialState(States.Off);
@@ -59,7 +62,7 @@ namespace Orchestrator
                 .Goto(States.Error)
                 .Execute(async () =>
                 {
-                    _isOn = States.Error;
+                    _direction = States.Error;
                     await _machine.Fire(Events.RollBack);
                 })
                 ;

@@ -21,7 +21,7 @@ namespace Orchestrator
             builder.In(States.Step1)
                 .ExecuteOnEntry(async () =>
                 {
-                    if (_isOn == States.Healthy)
+                    if (_direction == States.Healthy)
                     {
                         try
                         {
@@ -34,7 +34,7 @@ namespace Orchestrator
                             await _machine.Fire(Events.Error);
                         }
                     }
-                    else if (_isOn == States.Error)
+                    else if (_direction == States.Error)
                     {
                         await _machine.Fire(Events.RollBack);//To rollback to step 1
                     }
@@ -51,7 +51,7 @@ namespace Orchestrator
             builder.In(States.Step2)
                 .ExecuteOnEntry(async () =>
                 {
-                    if (_isOn == States.Healthy)
+                    if (_direction == States.Healthy)
                     {
                         try
                         {
@@ -64,7 +64,7 @@ namespace Orchestrator
                             await _machine.Fire(Events.Error);
                         }
                     }
-                    else if (_isOn == States.Error)
+                    else if (_direction == States.Error)
                     {
                         await _machine.Fire(Events.RollBack);//To rollback to step 1
                     }
